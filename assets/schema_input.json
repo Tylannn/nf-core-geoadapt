@@ -13,21 +13,30 @@
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
                 "meta": ["id"]
             },
-            "fastq_1": {
+            "vcf_path": {
                 "type": "string",
                 "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 1 must be provided, cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+\\.vcf(\\.gz)?$",
+                "errorMessage": "VCF file must be provided, cannot contain spaces and must have extension '.vcf' or '.vcf.gz'"
             },
-            "fastq_2": {
+            "population": {
                 "type": "string",
-                "format": "file-path",
-                "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
-                "errorMessage": "FastQ file for reads 2 cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
+                "pattern": "^\\S+$",
+                "errorMessage": "Population code must be provided and cannot contain spaces"
+            },
+            "latitude": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90,
+                "errorMessage": "Latitude must be a number between -90 and 90"
+            },
+            "longitude": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180,
+                "errorMessage": "Longitude must be a number between -180 and 180"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample", "vcf_path", "population", "latitude", "longitude"]
     }
 }
