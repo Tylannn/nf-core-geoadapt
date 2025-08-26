@@ -12,8 +12,25 @@ The directories listed below will be created in the results directory after the 
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
+- [Principal Component Analysis](#principal-component-analysis) - Population structure analysis using PLINK2
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
+
+### Principal Component Analysis
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `pca/`
+  - `*.eigenvec`: Principal component scores for each sample. This file contains the coordinates of each sample in the PC space.
+  - `*.eigenval`: Eigenvalues corresponding to each principal component. These represent the amount of variance explained by each PC.
+  - `*.log`: Log file from the PCA analysis containing processing information and statistics.
+
+</details>
+
+Principal Component Analysis (PCA) is performed using [PLINK2](https://www.cog-genomics.org/plink/2.0/) to investigate the population structure of the samples. The analysis generates principal components that can be used as covariates in downstream analyses to control for population structure.
+
+The eigenvector file contains the PC coordinates for each sample, with the first few principal components typically capturing the most significant population structure. The eigenvalue file shows the proportion of variance explained by each principal component.
 
 ### MultiQC
 

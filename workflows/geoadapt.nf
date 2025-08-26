@@ -4,6 +4,8 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+include { PLINK2_PCA             } from '../modules/nf-core/plink2/pca/main'
+include { VCF_TO_PLINK           } from '../modules/local/vcf_to_plink'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -23,6 +25,40 @@ workflow GEOADAPT {
 
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
+
+    //
+    // Create VCF channel from samplesheet
+    //
+    ch_vcf = ch_samplesheet
+        .map { meta, vcf_path ->
+            [ meta, file(vcf_path) ]
+        }
+
+    //
+    // MODULE: Convert VCF to PLINK binary format
+    //
+    VCF_TO_PLINK (
+        ch_vcf
+    )
+    ch_versions = ch_versions.mix(VCF_TO_PLINK.out.versions)
+
+    //
+    // MODULE: Principal Component Analysis
+    //
+    PLINK2_PCA (
+        VCF_TO_PLINK.out.plink_files
+            .map { meta, pgen, psam, pvar ->
+                [
+                    meta,
+                    params.pca_npcs,    // npcs - number of principal components
+                    params.pca_approx,  // use_approx - whether to use approximation
+                    pgen,               // PLINK binary genotype file
+                    psam,               // PLINK sample information file  
+                    pvar                // PLINK variant information file
+                ]
+            }
+    )
+    ch_versions = ch_versions.mix(PLINK2_PCA.out.versions)
 
     //
     // Collate and save software versions
@@ -76,8 +112,12 @@ workflow GEOADAPT {
         []
     )
 
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    emit:
+    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
+    pca_eigenvec   = PLINK2_PCA.out.evecfile     // channel: [ meta, eigenvec ]
+    pca_eigenval   = PLINK2_PCA.out.evfile       // channel: [ meta, eigenval ]
+    pca_log        = PLINK2_PCA.out.logfile      // channel: [ meta, log ]
 
 }
 
