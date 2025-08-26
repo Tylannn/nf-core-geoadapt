@@ -1,7 +1,7 @@
-process VCF_TO_PLINK {
+process PLINK2_VCF {
     tag "$meta.id"
     label 'process_single'
-    
+
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/plink2:2.00a5.10--h4ac6f70_0' :
@@ -11,8 +11,8 @@ process VCF_TO_PLINK {
     tuple val(meta), path(vcf)
 
     output:
-    tuple val(meta), path("*.pgen"), path("*.psam"), path("*.pvar"), emit: plink_files
-    path "versions.yml", emit: versions
+    tuple val(meta), path("*.pgen"), path("*.psam"), path("*.pvar"), emit: plink
+    path "versions.yml"           , emit: versions
 
     when:
     task.ext.when == null || task.ext.when

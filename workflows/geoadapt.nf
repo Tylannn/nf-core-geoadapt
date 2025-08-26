@@ -5,7 +5,7 @@
 */
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { PLINK2_PCA             } from '../modules/nf-core/plink2/pca/main'
-include { VCF_TO_PLINK           } from '../modules/local/vcf_to_plink'
+include { PLINK2_VCF             } from '../modules/nf-core/plink2/vcf/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -35,18 +35,18 @@ workflow GEOADAPT {
         }
 
     //
-    // MODULE: Convert VCF to PLINK binary format
+    // MODULE: Convert VCF to PLINK binary format using nf-core module
     //
-    VCF_TO_PLINK (
+    PLINK2_VCF (
         ch_vcf
     )
-    ch_versions = ch_versions.mix(VCF_TO_PLINK.out.versions)
+    ch_versions = ch_versions.mix(PLINK2_VCF.out.versions)
 
     //
     // MODULE: Principal Component Analysis
     //
     PLINK2_PCA (
-        VCF_TO_PLINK.out.plink_files
+        PLINK2_VCF.out.plink
             .map { meta, pgen, psam, pvar ->
                 [
                     meta,
