@@ -12,7 +12,6 @@ report.html
 # nf-test related files
 .nf-test/
 *.nf-test.log
-*.snap
 
 # Test output directories
 results/
