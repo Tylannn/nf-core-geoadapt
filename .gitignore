@@ -1,4 +1,41 @@
-.nextflow*
+# Nextflow runtime files
+.nextflow/
+.nextflow.log*
+.nextflow.pid
+nextflow.log*
+timeline.html
+trace.txt
+dag.dot
+dag.html
+report.html
+
+# nf-test related files
+.nf-test/
+*.nf-test.log
+*.snap
+
+# Test output directories
+results/
+output/
+test_output/
+
+# Singularity/container cache
+.singularity/
+singularity_cache/
+
+# Conda/Mamba environments
+.conda/
+.mamba/
+
+# IDE and editor files
+.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# System files
+.DS_Store
+Thumbs.db.nextflow*
 work/
 data/
 results/
