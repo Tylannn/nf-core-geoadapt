@@ -25,27 +25,29 @@
                 "pipeline_info",
                 "pipeline_info/nf_core_geoadapt_software_mqc_versions.yml",
                 "plink2",
-                "plink2/joint.eigenval",
-                "plink2/joint.eigenvec",
-                "plink2/joint.log",
-                "plink2/joint.pgen",
-                "plink2/joint.psam",
-                "plink2/joint.pvar"
+                "plink2/conversion",
+                "plink2/conversion/joint.pgen",
+                "plink2/conversion/joint.psam",
+                "plink2/conversion/joint.pvar",
+                "plink2/pca",
+                "plink2/pca/joint.eigenval",
+                "plink2/pca/joint.eigenvec",
+                "plink2/pca/joint.log"
             ],
             [
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "joint.eigenval:md5,4c0816b478aecfa27f141bbe6052b2c1",
-                "joint.eigenvec:md5,a6f0db5cc78bdb045dc7ff68b349bb91",
-                "joint.log:md5,0e8bc76441b9247edbacb7cad8ed9a16",
                 "joint.pgen:md5,cfbda59f0d65b24b657f909d1e74c1c1",
                 "joint.psam:md5,c5e6f04d1d55fd88234ed67dbc620c2f",
-                "joint.pvar:md5,d49c7a6a7f9da0a65e5a8f7bd10d3498"
+                "joint.pvar:md5,d49c7a6a7f9da0a65e5a8f7bd10d3498",
+                "joint.eigenval:md5,4c0816b478aecfa27f141bbe6052b2c1",
+                "joint.eigenvec:md5,a6f0db5cc78bdb045dc7ff68b349bb91",
+                "joint.log:md5,872c80ac5fa4db9111508c0d44a9a969"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.2"
         },
-        "timestamp": "2025-08-27T07:20:48.938114869"
+        "timestamp": "2025-08-27T08:04:11.528759284"
     }
 }

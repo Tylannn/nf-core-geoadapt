@@ -21,13 +21,15 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <details markdown="1">
 <summary>Output files</summary>
 
-- `plink2/`
-  - `joint.eigenvec`: Principal component scores for each sample. This file contains the coordinates of each sample in the PC space.
-  - `joint.eigenval`: Eigenvalues corresponding to each principal component. These represent the amount of variance explained by each PC.
-  - `joint.log`: Log file from the PCA analysis containing processing information and statistics.
+- `plink2/conversion/`
   - `joint.pgen`: PLINK2 binary genotype file.
   - `joint.psam`: PLINK2 sample information file.
   - `joint.pvar`: PLINK2 variant information file.
+
+- `plink2/pca/`
+  - `joint.eigenvec`: Principal component scores for each sample. This file contains the coordinates of each sample in the PC space.
+  - `joint.eigenval`: Eigenvalues corresponding to each principal component. These represent the amount of variance explained by each PC.
+  - `joint.log`: Log file from the PCA analysis containing processing information and statistics.
 
 </details>
 
