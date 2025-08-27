@@ -43,6 +43,28 @@
                 }
             }
         },
+        "pca_options": {
+            "title": "Principal Component Analysis options",
+            "type": "object",
+            "fa_icon": "fas fa-chart-line",
+            "description": "Options for population structure analysis using PCA.",
+            "properties": {
+                "pca_npcs": {
+                    "type": "integer",
+                    "default": 10,
+                    "description": "Number of principal components to compute.",
+                    "fa_icon": "fas fa-hashtag",
+                    "minimum": 1,
+                    "maximum": 100
+                },
+                "pca_approx": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Use approximate PCA algorithm for faster computation on large datasets.",
+                    "fa_icon": "fas fa-tachometer-alt"
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -192,6 +214,9 @@
     "allOf": [
         {
             "$ref": "#/$defs/input_output_options"
+        },
+        {
+            "$ref": "#/$defs/pca_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

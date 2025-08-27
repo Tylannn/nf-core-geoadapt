@@ -20,42 +20,38 @@
 
 ## Introduction
 
-**nf-core/geoadapt** is a bioinformatics pipeline that ...
+**nf-core/geoadapt** is a bioinformatics pipeline for genomic adaptation analysis that processes VCF files with population and geographic metadata to identify signatures of local adaptation. The pipeline performs joint population structure analysis using PLINK2 and generates comprehensive quality control reports with MultiQC.
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+The pipeline takes VCF files containing genetic variant data along with sample metadata (population identifiers and geographic coordinates) and performs Principal Component Analysis (PCA) to identify population structure and patterns of genomic adaptation across different geographic regions.
 
 <!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
      workflows use the "tube map" design for that. See https://nf-co.re/docs/guidelines/graphic_design/workflow_diagrams#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+
+The pipeline performs the following main steps:
+
+1. VCF file validation and conversion to PLINK2 binary format
+2. Joint Principal Component Analysis (PCA) for population structure analysis  
+3. Quality control report generation ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
 First, prepare a samplesheet with your input data that looks as follows:
 
 `samplesheet.csv`:
 
 ```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+sample,vcf_path,population,latitude,longitude
+sample1,data/sample1.vcf.gz,pop1,52.486243,-1.890401
+sample2,data/sample2.vcf.gz,pop1,60.17,24.93
+sample3,data/sample3.vcf.gz,pop2,23.13333,113.266667
 ```
 
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
+Each row represents a sample with its VCF file path, population identifier, and geographic coordinates (latitude/longitude).
 
 Now, you can run the pipeline using:
-
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
 ```bash
 nextflow run nf-core/geoadapt \
