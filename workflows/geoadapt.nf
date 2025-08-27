@@ -27,15 +27,23 @@ workflow GEOADAPT {
     ch_multiqc_files = Channel.empty()
 
     //
-    // Create VCF channel from samplesheet
+    // Create channel of unique VCF files for joint population analysis
+    // In population genetics, joint analysis of all samples is preferred over individual analysis
     //
     ch_vcf = ch_samplesheet
-        .map { meta, vcf_path ->
-            [ meta, file(vcf_path) ]
+        .map { meta, vcf_path -> [vcf_path, meta] }
+        .unique { it[0] }  // Get unique VCF files
+        .map { vcf_path, _meta -> 
+            def joint_meta = [
+                id: "joint",
+                vcf_path: vcf_path
+            ]
+            [joint_meta, file(vcf_path)]
         }
 
     //
-    // MODULE: Convert VCF to PLINK binary format using nf-core module
+    // MODULE: Convert VCF to PLINK binary format
+    // Process unique VCF files to create PLINK binary format for efficient analysis
     //
     PLINK2_VCF (
         ch_vcf
@@ -43,18 +51,19 @@ workflow GEOADAPT {
     ch_versions = ch_versions.mix(PLINK2_VCF.out.versions)
 
     //
-    // MODULE: Principal Component Analysis
+    // MODULE: Principal Component Analysis for population structure
+    // Joint PCA analysis of all samples to identify population structure and genomic adaptation patterns
     //
     PLINK2_PCA (
         PLINK2_VCF.out.plink
             .map { meta, pgen, psam, pvar ->
                 [
                     meta,
-                    params.pca_npcs,    // npcs - number of principal components
-                    params.pca_approx,  // use_approx - whether to use approximation
-                    pgen,               // PLINK binary genotype file
-                    psam,               // PLINK sample information file  
-                    pvar                // PLINK variant information file
+                    params.pca_npcs ?: 10,       // Number of principal components to calculate
+                    params.pca_approx ?: false,  // Whether to use approximation algorithm
+                    pgen,                        // PLINK binary genotype file
+                    psam,                        // PLINK sample information file  
+                    pvar                         // PLINK variant information file
                 ]
             }
     )
@@ -66,14 +75,14 @@ workflow GEOADAPT {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_'  +  'geoadapt_software_'  + 'mqc_'  + 'versions.yml',
+            name: 'nf_core_geoadapt_software_mqc_versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
 
 
     //
-    // MODULE: MultiQC
+    // MODULE: MultiQC - Generate comprehensive quality control report
     //
     ch_multiqc_config        = Channel.fromPath(
         "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
