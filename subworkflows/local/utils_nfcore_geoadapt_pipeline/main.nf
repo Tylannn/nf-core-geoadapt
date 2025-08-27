@@ -70,8 +70,14 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .map {
-            meta, vcf_path ->
-                return [ meta, vcf_path ]
+            meta, vcf_path, population, latitude, longitude ->
+                // Add population and coordinates to meta
+                def new_meta = meta + [
+                    population: population,
+                    latitude: latitude,
+                    longitude: longitude
+                ]
+                return [ new_meta, vcf_path ]
         }
         .set { ch_samplesheet }
 
