@@ -1,7 +1,0 @@
-PLINK2_PCA:
-  plink2: 2.00a5.10LM
-PLINK2_VCF:
-  plink2: 2.00a5.10LM
-Workflow:
-    nf-core/geoadapt: v1.0.0dev
-    Nextflow: 25.04.6

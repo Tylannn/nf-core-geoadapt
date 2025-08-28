@@ -1,3 +1,0 @@
-task_id	hash	native_id	name	status	exit	submit	duration	realtime	%cpu	peak_rss	peak_vmem	rchar	wchar
-1	64/61eefb	5648	NFCORE_GEOADAPT:GEOADAPT:PLINK2_VCF (joint)	COMPLETED	0	2025-08-28 09:12:26.162	4.6s	0ms	114.3%	3 MB	4.3 MB	78 KB	382 B
-2	e1/71a3b9	5958	NFCORE_GEOADAPT:GEOADAPT:PLINK2_PCA (joint)	FAILED	0	2025-08-28 09:12:30.975	404ms	0ms	66.7%	0	0	78 KB	369 B
