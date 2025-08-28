@@ -36,9 +36,37 @@ sample3,data/sample3.vcf.gz,pop2,23.13333,113.266667
 ### Multiple samples from the same VCF
 
 When multiple samples reference the same VCF file (as is common with population-scale datasets), the pipeline will automatically detect this and perform joint analysis on all samples within the VCF file. This is the recommended approach for population genetics studies as it enables proper population structure analysis.
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+
+## Redundancy Analysis (RDA)
+
+The pipeline includes optional Redundancy Analysis (RDA) functionality to test for associations between genetic variation and environmental variables while controlling for population structure. When enabled, the pipeline will:
+
+1. Download bioclimatic data based on sample coordinates using WorldClim data
+2. Filter environmental variables using Variance Inflation Factor (VIF) analysis to reduce multicollinearity
+3. Perform partial RDA using genetic data (PCA results) and filtered environmental variables
+
+### Enabling RDA
+
+To enable RDA analysis, use the `--rda` flag:
+
+```bash
+nextflow run nf-core/geoadapt --input ./samplesheet.csv --outdir ./results --rda -profile docker
+```
+
+### RDA Parameters
+
+- `--rda`: Enable RDA analysis (default: false)
+- `--vif_threshold`: VIF threshold for filtering environmental variables (default: 10)
+
+### RDA Output
+
+When RDA is enabled, additional output directories will be created:
+
+- `rda/`: RDA results, plots, and summary statistics
+- `csv/`: Environmental data tables (bioclimatic data, filtered variables)
+- `raster/`: Downloaded bioclimatic raster files
 
 ## Running the pipeline
 
