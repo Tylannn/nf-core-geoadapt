@@ -65,6 +65,28 @@
                 }
             }
         },
+        "rda_options": {
+            "title": "Redundancy Analysis (RDA) options",
+            "type": "object",
+            "fa_icon": "fas fa-globe",
+            "description": "Options for Redundancy Analysis to test associations between genetic variation and environmental variables.",
+            "properties": {
+                "rda": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable Redundancy Analysis (RDA) to test for associations between genetic variation and environmental variables.",
+                    "fa_icon": "fas fa-globe"
+                },
+                "vif_threshold": {
+                    "type": "number",
+                    "default": 10,
+                    "description": "Variance Inflation Factor (VIF) threshold for filtering environmental variables to reduce multicollinearity.",
+                    "fa_icon": "fas fa-filter",
+                    "minimum": 1,
+                    "maximum": 50
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -217,6 +239,9 @@
         },
         {
             "$ref": "#/$defs/pca_options"
+        },
+        {
+            "$ref": "#/$defs/rda_options"
         },
         {
             "$ref": "#/$defs/institutional_config_options"

@@ -16,6 +16,7 @@ report.html
 # Test output directories
 results/
 output/
+test_output*/
 test_output/
 
 # Singularity/container cache

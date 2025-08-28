@@ -6,6 +6,7 @@
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
 include { PLINK2_PCA             } from '../modules/nf-core/plink2/pca/main'
 include { PLINK2_VCF             } from '../modules/nf-core/plink2/vcf/main'
+include { RDA_ANALYSIS           } from '../subworkflows/local/rda_analysis/main'
 include { paramsSummaryMap       } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -70,6 +71,19 @@ workflow GEOADAPT {
     ch_versions = ch_versions.mix(PLINK2_PCA.out.versions)
 
     //
+    // SUBWORKFLOW: RDA Analysis (optional)
+    // Perform Redundancy Analysis if enabled
+    //
+    if (params.rda) {
+        RDA_ANALYSIS (
+            ch_samplesheet,
+            PLINK2_PCA.out.evecfile,
+            params.vif_threshold
+        )
+        ch_versions = ch_versions.mix(RDA_ANALYSIS.out.versions)
+    }
+
+    //
     // Collate and save software versions
     //
     softwareVersionsToYAML(ch_versions)
@@ -127,6 +141,15 @@ workflow GEOADAPT {
     pca_eigenvec   = PLINK2_PCA.out.evecfile     // channel: [ meta, eigenvec ]
     pca_eigenval   = PLINK2_PCA.out.evfile       // channel: [ meta, eigenval ]
     pca_log        = PLINK2_PCA.out.logfile      // channel: [ meta, log ]
+    
+    // RDA outputs (conditional)
+    rda_results    = params.rda ? RDA_ANALYSIS.out.rda_results : Channel.empty()    // channel: path(rda_results.txt)
+    rda_plot       = params.rda ? RDA_ANALYSIS.out.rda_plot : Channel.empty()       // channel: path(rda_plot.pdf)
+    rda_summary    = params.rda ? RDA_ANALYSIS.out.rda_summary : Channel.empty()    // channel: path(rda_summary.csv)
+    bioclim_csv    = params.rda ? RDA_ANALYSIS.out.bioclim_csv : Channel.empty()    // channel: path(bioclim_data.csv)
+    filtered_csv   = params.rda ? RDA_ANALYSIS.out.filtered_csv : Channel.empty()   // channel: path(filtered_env_vars.csv)
+    raster_files   = params.rda ? RDA_ANALYSIS.out.raster_files : Channel.empty()   // channel: path(*.tif)
+    vif_report     = params.rda ? RDA_ANALYSIS.out.vif_report : Channel.empty()     // channel: path(vif_report.txt)
 
 }
 

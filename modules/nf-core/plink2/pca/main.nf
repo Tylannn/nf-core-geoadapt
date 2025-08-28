@@ -42,7 +42,7 @@ process PLINK2_PCA {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.eigenvec ${prefix}.eigenval
+    touch ${prefix}.eigenvec ${prefix}.eigenval ${prefix}.log
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

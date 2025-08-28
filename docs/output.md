@@ -13,6 +13,7 @@ The directories listed below will be created in the results directory after the 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
 - [Principal Component Analysis](#principal-component-analysis) - Population structure analysis using PLINK2
+- [Redundancy Analysis (RDA)](#redundancy-analysis-rda) - Optional analysis of genetic-environment associations (when `--rda` is enabled)
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
@@ -21,23 +22,42 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 <details markdown="1">
 <summary>Output files</summary>
 
-- `plink2/conversion/`
-  - `joint.pgen`: PLINK2 binary genotype file.
-  - `joint.psam`: PLINK2 sample information file.
-  - `joint.pvar`: PLINK2 variant information file.
-
 - `plink2/pca/`
-  - `joint.eigenvec`: Principal component scores for each sample. This file contains the coordinates of each sample in the PC space.
-  - `joint.eigenval`: Eigenvalues corresponding to each principal component. These represent the amount of variance explained by each PC.
-  - `joint.log`: Log file from the PCA analysis containing processing information and statistics.
+  - `*.eigenvec`: Principal component scores for each sample
+  - `*.eigenval`: Eigenvalues (variance explained) for each principal component
+  - `*.log`: PLINK2 PCA log file
 
 </details>
 
-Principal Component Analysis (PCA) is performed using [PLINK2](https://www.cog-genomics.org/plink/2.0/) to investigate the population structure of the samples. The pipeline performs joint analysis of all samples, which is the gold standard approach in population genetics for identifying population structure and genomic adaptation patterns.
+Principal Component Analysis (PCA) is performed using PLINK2 to identify population structure and patterns of genetic variation. The analysis generates principal component scores that can be used to control for population structure in downstream analyses.
 
-The analysis generates principal components that can be used as covariates in downstream analyses to control for population structure. The eigenvector file contains the PC coordinates for each sample, with the first few principal components typically capturing the most significant population structure. The eigenvalue file shows the proportion of variance explained by each principal component.
+### Redundancy Analysis (RDA)
 
-All samples are analyzed together in a single joint analysis (output files prefixed with `joint.`) rather than individual per-sample analyses, ensuring proper population structure detection across the entire dataset.
+<details markdown="1">
+<summary>Output files (only when `--rda` is enabled)</summary>
+
+- `rda/`
+  - `rda_results.txt`: Detailed RDA results including model summary, significance tests, and variable scores
+  - `rda_plot.pdf`: RDA biplot visualization showing samples and environmental vectors
+  - `rda_summary.csv`: Summary statistics from the RDA analysis
+
+- `csv/`
+  - `bioclim_data.csv`: Bioclimatic variables extracted for each population
+  - `filtered_env_vars.csv`: Environmental variables after VIF filtering
+  - `vif_report.txt`: Report of VIF analysis and variable filtering
+
+- `raster/`
+  - `bio*.tif`: Downloaded bioclimatic raster files from WorldClim
+
+</details>
+
+Redundancy Analysis (RDA) tests for associations between genetic variation and environmental variables while controlling for population structure. The analysis includes:
+
+1. **Environmental data collection**: Downloads 19 bioclimatic variables from WorldClim based on population coordinates
+2. **VIF filtering**: Removes correlated environmental variables using Variance Inflation Factor analysis
+3. **Partial RDA**: Performs constrained ordination using genetic data and environmental predictors while controlling for population structure (using PCA components as covariates)
+
+The RDA results include significance tests, variance partitioning, and visualization of genetic-environment associations.
 
 ### MultiQC
 
