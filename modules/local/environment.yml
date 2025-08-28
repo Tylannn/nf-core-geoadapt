@@ -1,0 +1,12 @@
+name: geoadapt_rda
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base >=4.2
+  - r-vegan >=2.6
+  - r-geodata >=0.6
+  - r-terra >=1.7
+  - r-dplyr >=1.1
+  - r-ggplot2 >=3.4
+  - r-readr >=2.1
