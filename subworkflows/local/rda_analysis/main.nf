@@ -4,9 +4,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { GET_BIOCLIM_DATA      } from '../../modules/local/get_bioclim_data/main'
-include { FILTER_ENV_VARS_VIF   } from '../../modules/local/filter_env_vars_vif/main'
-include { PERFORM_RDA           } from '../../modules/local/perform_rda/main'
+include { GET_BIOCLIM_DATA      } from '../../../modules/local/get_bioclim_data/main'
+include { FILTER_ENV_VARS_VIF   } from '../../../modules/local/filter_env_vars_vif/main'
+include { PERFORM_RDA           } from '../../../modules/local/perform_rda/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

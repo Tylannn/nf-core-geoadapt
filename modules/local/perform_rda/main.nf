@@ -128,7 +128,7 @@ process PERFORM_RDA {
             rda_summary\$unconstr.chi,
             rda_summary\$constr.chi / rda_summary\$tot.chi,
             rda_anova\$F[1],
-            rda_anova\$\`Pr(>F)\`[1],
+            rda_anova[1, "Pr(>F)"],
             ncol(env_vars_clean),
             nrow(env_vars_clean)
         )
